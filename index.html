@@ -10,17 +10,31 @@
 
 <body ng-app="wardrobeApp">
 
-	<section>
-		<label for="wardrobe-width">Largeur de l'armoire</label>
-		<input type="number" id="wardrobe-width" placeholder="Largeur" ng-model="wardrobeWidth">
-		<label for="wardrobe-height">Hauteur de l'armoire</label>
-		<input type="number" id="wardrobe-height" placeholder="Hauteur" ng-model="wardrobeHeight">
+	<section class="section-controls">
 
-		<section generate-svg></section>
-	</section>
+		<div class="wardrobe-controls">
+			<label for="wardrobe-width">Largeur de l'armoire</label>
+			<input type="number" id="wardrobe-width" placeholder="Largeur" ng-model="wardrobeWidth">
+			<label for="wardrobe-height">Hauteur de l'armoire</label>
+			<input type="number" id="wardrobe-height" placeholder="Hauteur" ng-model="wardrobeHeight">
+		</div>
+
+		<div class="blocks-controls" ng-controller="blocksController">
+			<button ng-click="addBlock()">Ajouter un bloc</button>
+			<ol id="blocks-list">
+			</ol>
+		</div>
+
+	</section><!-- 
+	
+ --><section class="section-svg">
+
+ 		<svg class="wardrobe-svg" width={{wardrobeWidth}} height={{wardrobeHeight}} generate-svg></svg>
+ 		
+ 	</section>
 
 	<script src="js/vendor/angular.min.js"></script>
-    <script src="js/generate_svg.js"></script>
+    <script src="js/app.js"></script>
 
 </body>
 </html>

@@ -1,0 +1,33 @@
+html {
+	box-sizing: border-box;
+}
+
+*,
+*:before,
+*:after {
+	box-sizing: inherit;
+}
+
+body {
+	margin: 0;
+}
+
+.section-controls,
+.section-svg {
+	display: inline-block;
+	width: 50%;
+	vertical-align: top;
+	min-height: 100vh;
+	padding: 2em;
+}
+
+.section-svg {
+	position: relative;
+}
+
+.wardrobe-svg {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
