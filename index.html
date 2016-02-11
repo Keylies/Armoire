@@ -10,9 +10,11 @@
 </head>
 
 <body ng-app="wardrobeApp">
-    <div class="" ng-controller="mainController">
-        <section class="section-controls">
 
+    <div class="wrapper" ng-controller="mainController">
+
+        <section class="section-controls">
+            {{message}}
             <div class="wardrobe-controls">
                 <label for="wardrobe-width">Largeur de l'armoire</label>
                 <input type="number" id="wardrobe-width" placeholder="Largeur" ng-model="wardrobeWidth">
@@ -21,30 +23,29 @@
             </div>
 
             <div class="blocks-controls">
+                <label for="block-type">Type de bloc</label>
+                <select id="block-type" name="block-type" ng-model="blockType">
+                    <option value="shelf">Étagère</option>
+                    <option value="drawer">Tiroir</option>
+                    <option value="closet">Penderie</option>
+                </select>
                 <generateblockbutton></generateblockbutton>
-                <ol id="blocks-list">                  
-                    <!--			
-                   li
-                    => 2 inputs -> width, height
-                        => chacun -> ng-model="blockWidth(Id)",ng-model="blockHeight(Id)"
--->
-                </ol>
+                <ol id="blocks-list"></ol>
             </div>
-
-        </section>
-        <!-- 
+        </section><!-- 
 	
- -->
-        <section class="section-svg">            
-            <svg class="wardrobe-svg" ng-style="{ 'width' : wardrobeWidth, 'height': wardrobeHeight}" fill="#000"  >
-                <rect  ng-style="{ 'width' : wardrobeWidth, 'height': wardrobeHeight}" fill="rgba(0,0,0,0.5)"></rect>
+     --><section class="section-svg">   
+            <svg id="wardrobe-svg" class="wardrobe-svg" width="{{wardrobeWidth}}" height="{{wardrobeHeight}}">
+                <rect width="{{wardrobeWidth}}" height="{{wardrobeHeight}}" fill="#000"></rect>
             </svg>
 
+            <!-- ng-style="{'width': wardrobeWidth, 'height': wardrobeHeight }" -->
         </section>
+
     </div>
+
     <script src="js/vendor/angular.min.js"></script>
     <script src="js/app.js"></script>
 
 </body>
-
 </html>
