@@ -1,40 +1,51 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
-	<meta charset="utf-8">
-	<title>Armoire</title>
-	<meta name="description" content="">
-	<meta name="viewport" content="width=device-width">
-	<link rel="stylesheet" href="styles/main.css">
+    <meta charset="utf-8">
+    <title>Armoire</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width">
+    <link rel="stylesheet" href="styles/main.css">
 </head>
 
 <body ng-app="wardrobeApp">
+    <div class="" ng-controller="mainController">
+        <section class="section-controls">
 
-	<section class="section-controls">
+            <div class="wardrobe-controls">
+                <label for="wardrobe-width">Largeur de l'armoire</label>
+                <input type="number" id="wardrobe-width" placeholder="Largeur" ng-model="wardrobeWidth">
+                <label for="wardrobe-height">Hauteur de l'armoire</label>
+                <input type="number" id="wardrobe-height" placeholder="Hauteur" ng-model="wardrobeHeight">
+            </div>
 
-		<div class="wardrobe-controls">
-			<label for="wardrobe-width">Largeur de l'armoire</label>
-			<input type="number" id="wardrobe-width" placeholder="Largeur" ng-model="wardrobeWidth">
-			<label for="wardrobe-height">Hauteur de l'armoire</label>
-			<input type="number" id="wardrobe-height" placeholder="Hauteur" ng-model="wardrobeHeight">
-		</div>
+            <div class="blocks-controls">
+                <button ng-click="addBlock()">Ajouter un bloc</button>
+                <ol id="blocks-list">
+                   <li generate-block></li>
+                    <!--			
+                   li
+                    => 2 inputs -> width, height
+                        => chacun -> ng-model="blockWidth(Id)",ng-model="blockHeight(Id)"
+-->
+                </ol>
+            </div>
 
-		<div class="blocks-controls" ng-controller="blocksController">
-			<button ng-click="addBlock()">Ajouter un bloc</button>
-			<ol id="blocks-list">
-			</ol>
-		</div>
-
-	</section><!-- 
+        </section>
+        <!-- 
 	
- --><section class="section-svg">
+ -->
+        <section class="section-svg">            
+            <svg class="wardrobe-svg" ng-style="{ 'width' : wardrobeWidth, 'height': wardrobeHeight}" fill="#000"  >
+                <rect  ng-style="{ 'width' : wardrobeWidth, 'height': wardrobeHeight}" fill="rgba(0,0,0,0.5)"></rect>
+            </svg>
 
- 		<svg class="wardrobe-svg" width={{wardrobeWidth}} height={{wardrobeHeight}} generate-svg></svg>
- 		
- 	</section>
-
-	<script src="js/vendor/angular.min.js"></script>
+        </section>
+    </div>
+    <script src="js/vendor/angular.min.js"></script>
     <script src="js/app.js"></script>
 
 </body>
+
 </html>
