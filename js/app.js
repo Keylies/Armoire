@@ -1,10 +1,13 @@
-//'use strict';
+'use strict';
 
 var wardrobeApp = angular.module('wardrobeApp', []);
 
-wardrobeApp.controller('mainController', ['$scope', function ($scope) {
+wardrobeApp.controller('mainController', ['$scope', '$compile', function ($scope, $compile) {
     $scope.count = 0;
+    $scope.multiplyCoeff = 2;
     $scope.block = [];
+    $scope.stepsIndex = [];
+    $scope.stepsCurrentIndex = 0;
     $scope.defaultRectCoords = {
         width: 30,
         height: 30
@@ -12,30 +15,62 @@ wardrobeApp.controller('mainController', ['$scope', function ($scope) {
 
     $scope.wardrobeWidth = 200;
     $scope.wardrobeHeight = 200;
-    $scope.wardrobeWidthRatio = $scope.wardrobeWidth * 2;
-    $scope.wardrobeHeightRatio = $scope.wardrobeHeight * 2;
+    $scope.wardrobeWidthRatio = $scope.wardrobeWidth * $scope.multiplyCoeff;
+    $scope.wardrobeHeightRatio = $scope.wardrobeHeight * $scope.multiplyCoeff;
 
-    $scope.checkOffsets = function (index) {};
-    $scope.checkWardrobe = function () {
-        $scope.wardrobeWidthRatio = $scope.wardrobeWidth * 2;
-        $scope.wardrobeHeightRatio = $scope.wardrobeHeight * 2;
+    $scope.limits = {
+        blockLimitWidth: $scope.wardrobeWidth * $scope.multiplyCoeff
     };
+
+    $scope.replaceHeight = function (index) {                
+        $scope.block[index].y--;
+        $compile(document.getElementById('rect' + index))(scope);
+    }
+    $scope.checkOffsets = function (index) {
+        console.log(this);
+    };
+    $scope.checkWardrobe = function () {
+        $scope.wardrobeWidthRatio = $scope.wardrobeWidth * $scope.multiplyCoeff;
+        $scope.wardrobeHeightRatio = $scope.wardrobeHeight * $scope.multiplyCoeff;
+    };
+    $scope.findIndexFirstElementPreviousStep = function () {
+        return $scope.stepsIndex[$scope.stepsIndex.length - 2][0];
+    };
+
+    $scope.manageStepsIndex = function () {
+        if ($scope.stepsIndex[$scope.stepsCurrentIndex] == undefined) {
+            $scope.stepsIndex[$scope.stepsCurrentIndex] = [];
+        }
+    };
+
     $scope.placeRect = function () {
         if ($scope.block.length > 1) {
-            return {
-                x: 0,
-                y: 0
-            };
+            var lastBlock = $scope.block[$scope.block.length - 2];
+            if ((lastBlock.x + ($scope.defaultRectCoords.width * $scope.multiplyCoeff) + ($scope.defaultRectCoords.width * $scope.multiplyCoeff)) < $scope.limits.blockLimitWidth) {
+                $scope.manageStepsIndex();
+                $scope.stepsIndex[$scope.stepsCurrentIndex].push($scope.count);
+                return {
+                    x: lastBlock.x + (lastBlock.width * $scope.multiplyCoeff) + 1,
+                    y: lastBlock.y
+                };
+            } else {
+                $scope.stepsCurrentIndex++;
+                $scope.manageStepsIndex();
+                $scope.stepsIndex[$scope.stepsCurrentIndex].push($scope.count);
+                return {
+                    x: 0,
+                    y: $scope.block[$scope.findIndexFirstElementPreviousStep()].y - $scope.defaultRectCoords.height * $scope.multiplyCoeff
+                };
+            }
         } else {
+            $scope.manageStepsIndex();
+            $scope.stepsIndex[$scope.stepsCurrentIndex].push($scope.count);
             return {
                 x: 0,
-                y: $scope.wardrobeHeightRatio - $scope.defaultRectCoords.height,
+                y: $scope.wardrobeHeightRatio - ($scope.defaultRectCoords.height * $scope.multiplyCoeff)
             };
         }
     };
-    $scope.placeRectsOnChange = function (){
-        
-    }
 }]);
 
 
@@ -60,9 +95,12 @@ wardrobeApp.directive('generateli', function ($compile) {
 
             if (typeof scope.blockType != 'undefined') {
                 scope.block.push({
+                    x: 0,
+                    y: 0,
                     width: scope.defaultRectCoords.width,
                     height: scope.defaultRectCoords.height,
-                    fill: "#FF0000"
+                    fill: "#FF0000",
+                    index: scope.count
                 });
 
                 angular.element(document.getElementById('blocks-list')).append(
@@ -74,7 +112,7 @@ wardrobeApp.directive('generateli', function ($compile) {
                         '</div>' +
                         '<div>' +
                         '<label for="block-height' + scope.count + '">Hauteur du bloc</label>' +
-                        '<input type="number" id="block-height' + scope.count + '" placeholder="Hauteur" ng-model="block[' + scope.count + '].height" ng-change="checkOffsets(' + scope.count + ')">' +
+                        '<input type="number" id="block-height' + scope.count + '" placeholder="Hauteur" ng-model="block[' + scope.count + '].height" ng-change="checkOffsets(' + scope.count + '); replaceHeight(' + scope.count + ')">' +
                         '</div>' +
                         '<div>' +
                         '<label for="block-color' + scope.count + '">Couleur du bloc</label>' +
@@ -90,13 +128,16 @@ wardrobeApp.directive('generateli', function ($compile) {
 
                     var xmlns = "http://www.w3.org/2000/svg";
                     var rect = document.createElementNS(xmlns, 'rect');
-                    var coords = scope.placeRect();                    
+                    var coords = scope.placeRect();
                     rect.setAttribute('x', coords.x);
                     rect.setAttribute('y', coords.y);
-                    rect.setAttribute('ng-attr-width', "{{block[" + scope.count + "].width}}");
-                    rect.setAttribute('ng-attr-height', "{{block[" + scope.count + "].height}}");
-                    rect.setAttribute('ng-attr-fill', "{{block[" + scope.count + "].fill}}");                    
-                    
+                    scope.block[scope.count].x = coords.x;
+                    scope.block[scope.count].y = coords.y;
+                    rect.setAttribute('ng-attr-width', "{{block[" + scope.count + "].width * " + scope.multiplyCoeff + "}}");
+                    rect.setAttribute('ng-attr-height', "{{block[" + scope.count + "].height * " + scope.multiplyCoeff + "}}");
+                    rect.setAttribute('ng-attr-fill', "{{block[" + scope.count + "].fill}}");
+                    rect.setAttribute('id', "rect" + scope.count);
+
                     svg.appendChild(rect);
                     $compile(svg)(scope);
                 } else if (scope.blockType == 'drawer') {
@@ -118,5 +159,3 @@ wardrobeApp.directive('generateli', function ($compile) {
         });
     };
 });
-
-// http://jsfiddle.net/ftfish/KyEr3/
