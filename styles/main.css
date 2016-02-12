@@ -22,7 +22,7 @@ body {
 }
 
 .section-svg {
-	position: relative;
+	position: fixed;
 }
 
 .wardrobe-svg {

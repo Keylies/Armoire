@@ -41,43 +41,54 @@ wardrobeApp.directive('generateli', function ($compile){
     return function (scope, element, attrs){
 		element.bind('click', function (){
 
-            angular.element(document.getElementById('blocks-list')).append(
-                $compile(
-                    '<li>' +
-                        '<label for="block-width' + scope.count + '">Largeur du bloc</label>' +
-                        '<input type="number" id="block-width' + scope.count + '" placeholder="Largeur" ng-model="blockWidth' + scope.count + '">' +
-                        '<label for="block-height' + scope.count + '">Hauteur du bloc</label>' +
-                        '<input type="number" id="block-height' + scope.count + '" placeholder="Hauteur" ng-model="blockHeight' + scope.count + '">' +
-                    '</li>'
-                )
-            (scope));
+            if ( typeof scope.blockType != 'undefined' ) {
 
-            var svg = document.getElementById('wardrobe-svg');
-
-            if ( scope.blockType == 'shelf' ) {
-
-                angular.element(svg).append(
+                angular.element(document.getElementById('blocks-list')).append(
                     $compile(
-                        '<polygon>'
+                        '<li>' +
+                            '<div>' +
+                                '<label for="block-width' + scope.count + '">Largeur du bloc</label>' +
+                                '<input type="number" id="block-width' + scope.count + '" placeholder="Largeur" ng-model="blockWidth' + scope.count + '">' +
+                            '</div>' +
+                            '<div>' +
+                                '<label for="block-height' + scope.count + '">Hauteur du bloc</label>' +
+                                '<input type="number" id="block-height' + scope.count + '" placeholder="Hauteur" ng-model="blockHeight' + scope.count + '">' +
+                            '</div>' +
+                            '<div>' +
+                                '<label for="block-color' + scope.count + '">Couleur du bloc</label>' +
+                                '<input type="color" id="block-color' + scope.count + '" ng-model="blockColor' + scope.count + '">' +
+                            '</div>' +
+                        '</li>'
                     )
                 (scope));
-            }
-            else if ( scope.blockType == 'drawer' ) {
-                angular.element(svg).append(
-                    $compile(
-                        '<polygon>'
-                    )
-                (scope));
-            }
-            else {// closet
-                angular.element(svg).append(
-                    $compile(
-                        '<polygon>'
-                    )
-                (scope));
-            }
 
-            scope.count++;		
+                var svg = document.getElementById('wardrobe-svg');
+
+                if ( scope.blockType == 'shelf' ) {
+
+                    angular.element(svg).append(
+                        $compile(
+                            '<polygon>'
+                        )
+                    (scope));
+                }
+                else if ( scope.blockType == 'drawer' ) {
+                    angular.element(svg).append(
+                        $compile(
+                            '<polygon>'
+                        )
+                    (scope));
+                }
+                else {// closet
+                    angular.element(svg).append(
+                        $compile(
+                            '<polygon>'
+                        )
+                    (scope));
+                }
+
+                scope.count++;
+            }		
 		});	
 	};
 });
