@@ -14,15 +14,15 @@
     <div class="wrapper" ng-controller="mainController">
 
         <section class="section-controls">
-            {{message}}
+
             <div class="wardrobe-controls">
                 <div>
                     <label for="wardrobe-width">Largeur de l'armoire</label>
-                    <input type="number" id="wardrobe-width" placeholder="Largeur" ng-model="wardrobeWidth">
+                    <input type="number" id="wardrobe-width" placeholder="Largeur" ng-model="wardrobeWidth" ng-change="checkWardrobe()">
                 </div>
                 <div>
                     <label for="wardrobe-height">Hauteur de l'armoire</label>
-                    <input type="number" id="wardrobe-height" placeholder="Hauteur" ng-model="wardrobeHeight">
+                    <input type="number" id="wardrobe-height" placeholder="Hauteur" ng-model="wardrobeHeight" ng-change="checkWardrobe()">
                 </div>
                 <div>
                     <label for="wardrobe-depth">Profondeur de l'armoire</label>
@@ -40,11 +40,14 @@
                 <generateblockbutton></generateblockbutton>
                 <ol id="blocks-list"></ol>
             </div>
-        </section><!-- 
+        </section>
+        <!-- 
 	
-     --><section class="section-svg">   
-            <svg id="wardrobe-svg" class="wardrobe-svg" width="{{wardrobeWidth}}" height="{{wardrobeHeight}}">
-                <rect width="{{wardrobeWidth}}" height="{{wardrobeHeight}}" fill="#000"></rect>
+     -->
+        <section class="section-svg">
+            <svg id="wardrobe-svg" class="wardrobe-svg" width="{{wardrobeWidthRatio}}" height="{{wardrobeHeightRatio}}">
+                <rect width="{{wardrobeWidthRatio}}" height="{{wardrobeHeightRatio}}" fill="#000" />
+
             </svg>
 
             <!-- ng-style="{'width': wardrobeWidth, 'height': wardrobeHeight }" -->
@@ -54,6 +57,6 @@
 
     <script src="js/vendor/angular.min.js"></script>
     <script src="js/app.js"></script>
-
 </body>
+
 </html>
