@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 19.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve">
+<g id="structArmoire">
+	<polyline id="colorLeft" fill="#7C99C4" points="9.348,426.93 62.556,398.917 62.723,5.708 9.348,33.375 	"/>
+	<rect id="back" x="63.069" y="5.167" fill="#D8D8D8" stroke="#000000" stroke-miterlimit="10" width="315" height="394"/>
+	<polygon id="colorUp" fill="#1B1E1C" points="9,32.675 63.069,4.675 376.958,5.25 324,32.675 	"/>
+	<polygon id="colorBas" fill="#303020" points="9,427.167 63.069,399.167 377.288,399.571 324,427.167 	"/>
+	<polyline id="colorRight" fill="#51AF80" points="324.459,426.93 377.667,398.917 377.834,5.708 324.459,33.375 	"/>
+	<g id="FrontArmoire">
+		<polyline fill="#565647" points="9,422.5 324,422.5 324,427.5 9,427.167 		"/>
+		<rect x="9" y="33.167" fill="none" stroke="#000000" stroke-miterlimit="10" width="315" height="394"/>
+	</g>
+</g>
+</svg>

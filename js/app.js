@@ -106,52 +106,90 @@ wardrobeApp.directive('generateli', function ($compile) {
                 angular.element(document.getElementById('blocks-list')).append(
                     $compile(
                         '<li>' +
-                        '<div>' +
-                        '<label for="block-width' + scope.count + '">Largeur du bloc</label>' +
-                        '<input type="number" id="block-width' + scope.count + '" placeholder="Largeur" ng-model="block[' + scope.count + '].width" ng-change="checkOffsets(' + scope.count + ')">' +
-                        '</div>' +
-                        '<div>' +
-                        '<label for="block-height' + scope.count + '">Hauteur du bloc</label>' +
-                        '<input type="number" id="block-height' + scope.count + '" placeholder="Hauteur" ng-model="block[' + scope.count + '].height" ng-change="checkOffsets(' + scope.count + '); replaceHeight(' + scope.count + ')">' +
-                        '</div>' +
-                        '<div>' +
-                        '<label for="block-color' + scope.count + '">Couleur du bloc</label>' +
-                        '<input type="color" id="block-color' + scope.count + '" ng-model="block[' + scope.count + '].fill" ng-change="checkOffsets(' + scope.count + ')">' +
-                        '</div>' +
+                            '<div>' +
+                                '<label for="block-width' + scope.count + '">Largeur du bloc</label>' +
+                                '<input type="number" id="block-width' + scope.count + '" placeholder="Largeur" ng-model="block[' + scope.count + '].width" ng-change="checkOffsets(' + scope.count + ')">' +
+                            '</div>' +
+                            '<div>' +
+                                '<label for="block-height' + scope.count + '">Hauteur du bloc</label>' +
+                                '<input type="number" id="block-height' + scope.count + '" placeholder="Hauteur" ng-model="block[' + scope.count + '].height" ng-change="checkOffsets(' + scope.count + '); replaceHeight(' + scope.count + ')">' +
+                            '</div>' +
+                            '<div>' +
+                                '<label for="block-color' + scope.count + '">Couleur du bloc</label>' +
+                                '<input type="color" id="block-color' + scope.count + '" ng-model="block[' + scope.count + '].fill" ng-change="checkOffsets(' + scope.count + ')">' +
+                            '</div>' +
                         '</li>'
                     )
                     (scope));
 
                 var svg = document.getElementById('wardrobe-svg');
+                var xmlns = "http://www.w3.org/2000/svg";
+                var coords = scope.placeRect();
+
+                var g = document.createElementNS(xmlns, 'g');
+                var rect = document.createElementNS(xmlns, 'rect');
+
+                rect.setAttribute('ng-attr-width', "{{block[" + scope.count + "].width * " + scope.multiplyCoeff + "}}");
+                rect.setAttribute('ng-attr-height', "{{block[" + scope.count + "].height * " + scope.multiplyCoeff + "}}");
+                rect.setAttribute('ng-attr-fill', "{{block[" + scope.count + "].fill}}");
+                rect.setAttribute('id', "rect" + scope.count);
+                rect.setAttribute('x', coords.x);
+                rect.setAttribute('y', coords.y);
+                scope.block[scope.count].x = coords.x;
+                scope.block[scope.count].y = coords.y;
 
                 if (scope.blockType == 'shelf') {
+      
+                    var secondRect = document.createElementNS(xmlns, 'rect');
 
-                    var xmlns = "http://www.w3.org/2000/svg";
-                    var rect = document.createElementNS(xmlns, 'rect');
-                    var coords = scope.placeRect();
-                    rect.setAttribute('x', coords.x);
-                    rect.setAttribute('y', coords.y);
-                    scope.block[scope.count].x = coords.x;
-                    scope.block[scope.count].y = coords.y;
-                    rect.setAttribute('ng-attr-width', "{{block[" + scope.count + "].width * " + scope.multiplyCoeff + "}}");
-                    rect.setAttribute('ng-attr-height', "{{block[" + scope.count + "].height * " + scope.multiplyCoeff + "}}");
-                    rect.setAttribute('ng-attr-fill', "{{block[" + scope.count + "].fill}}");
-                    rect.setAttribute('id', "rect" + scope.count);
+                    scope.block[scope.count].fill = "#FCDDB1";
 
-                    svg.appendChild(rect);
+                    secondRect.setAttribute('width', "{{block[" + scope.count + "].width * " + scope.multiplyCoeff + "}}");
+                    secondRect.setAttribute('height', "4");
+                    secondRect.setAttribute('x', "{{block[" + scope.count + "].x}}");
+                    secondRect.setAttribute('y', "{{block[" + scope.count + "].y + (block[" + scope.count + "].height * " + scope.multiplyCoeff + " - 4)}}");
+
+                    g.appendChild(rect);
+                    g.appendChild(secondRect);
+
+                    svg.appendChild(g);
+
                     $compile(svg)(scope);
+
                 } else if (scope.blockType == 'drawer') {
-                    angular.element(svg).append(
-                        $compile(
-                            '<polygon>'
-                        )
-                        (scope));
+
+                    var circle = document.createElementNS(xmlns, 'circle');
+
+                    scope.block[scope.count].fill = "#D8D8CB";
+
+                    circle.setAttribute('cx', "{{block[" + scope.count + "].x + (block[" + scope.count + "].width * " + scope.multiplyCoeff + " / 2)}}");
+                    circle.setAttribute('cy', "{{block[" + scope.count + "].y + (block[" + scope.count + "].height * " + scope.multiplyCoeff + " / 2)}}");
+                    circle.setAttribute('r', "4.5");
+
+                    g.appendChild(rect);
+                    g.appendChild(circle);
+
+                    svg.appendChild(g);
+
+                    $compile(svg)(scope);
+
                 } else { // closet
-                    angular.element(svg).append(
-                        $compile(
-                            '<polygon>'
-                        )
-                        (scope));
+
+                    var secondRect = document.createElementNS(xmlns, 'rect');
+
+                    scope.block[scope.count].fill = "#7C99C4";
+
+                    secondRect.setAttribute('width', "{{block[" + scope.count + "].width * " + scope.multiplyCoeff + "}}");
+                    secondRect.setAttribute('height', "4");
+                    secondRect.setAttribute('x', "{{block[" + scope.count + "].x}}");
+                    secondRect.setAttribute('y', "{{block[" + scope.count + "].y + (block[" + scope.count + "].height * " + scope.multiplyCoeff + " / 5)}}");
+
+                    g.appendChild(rect);
+                    g.appendChild(secondRect);
+
+                    svg.appendChild(g);
+
+                    $compile(svg)(scope);
                 }
 
                 scope.count++;
