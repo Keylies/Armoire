@@ -1,3 +1,12 @@
+/*
+
+
+    J'ai ajouté + 80 ligne 147 car j'ai du aussi ajouter + 80 au svg en y
+    afin qu'on puisse voir la profondeur (qui peut aller jusqu'à 80 cm)
+
+
+ */
+
 'use strict';
 
 var wardrobeApp = angular.module('wardrobeApp', []);
@@ -136,7 +145,7 @@ wardrobeApp.directive('generateli', function ($compile) {
                 rect.setAttribute('ng-attr-fill', "{{block[" + scope.count + "].fill}}");
                 rect.setAttribute('id', "rect" + scope.count);
                 rect.setAttribute('x', coords.x);
-                rect.setAttribute('y', coords.y);
+                rect.setAttribute('y', coords.y + 80);
                 scope.block[scope.count].x = coords.x;
                 scope.block[scope.count].y = coords.y;
 
@@ -149,7 +158,7 @@ wardrobeApp.directive('generateli', function ($compile) {
                     secondRect.setAttribute('width', "{{block[" + scope.count + "].width * " + scope.multiplyCoeff + "}}");
                     secondRect.setAttribute('height', "4");
                     secondRect.setAttribute('x', "{{block[" + scope.count + "].x}}");
-                    secondRect.setAttribute('y', "{{block[" + scope.count + "].y + (block[" + scope.count + "].height * " + scope.multiplyCoeff + " - 4)}}");
+                    secondRect.setAttribute('y', "{{block[" + scope.count + "].y + (block[" + scope.count + "].height * " + scope.multiplyCoeff + " - 4) + 80}}");
 
                     g.appendChild(rect);
                     g.appendChild(secondRect);
@@ -165,7 +174,7 @@ wardrobeApp.directive('generateli', function ($compile) {
                     scope.block[scope.count].fill = "#D8D8CB";
 
                     circle.setAttribute('cx', "{{block[" + scope.count + "].x + (block[" + scope.count + "].width * " + scope.multiplyCoeff + " / 2)}}");
-                    circle.setAttribute('cy', "{{block[" + scope.count + "].y + (block[" + scope.count + "].height * " + scope.multiplyCoeff + " / 2)}}");
+                    circle.setAttribute('cy', "{{block[" + scope.count + "].y + (block[" + scope.count + "].height * " + scope.multiplyCoeff + " / 2 + 80)}}");
                     circle.setAttribute('r', "4.5");
 
                     g.appendChild(rect);
@@ -184,7 +193,7 @@ wardrobeApp.directive('generateli', function ($compile) {
                     secondRect.setAttribute('width', "{{block[" + scope.count + "].width * " + scope.multiplyCoeff + "}}");
                     secondRect.setAttribute('height', "4");
                     secondRect.setAttribute('x', "{{block[" + scope.count + "].x}}");
-                    secondRect.setAttribute('y', "{{block[" + scope.count + "].y + (block[" + scope.count + "].height * " + scope.multiplyCoeff + " / 5)}}");
+                    secondRect.setAttribute('y', "{{block[" + scope.count + "].y + (block[" + scope.count + "].height * " + scope.multiplyCoeff + " / 5 + 80)}}");
 
                     g.appendChild(rect);
                     g.appendChild(secondRect);
