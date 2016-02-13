@@ -10,25 +10,49 @@ html {
 
 body {
 	margin: 0;
+	
+}
+
+h1 {
+	margin: 0;
+}
+
+header {
+	text-align: center;
 }
 
 .section-controls,
 .section-svg {
 	display: inline-block;
 	vertical-align: top;
-	min-height: 100vh;
-	padding: 2em;
+	padding: 1em;
+	
 }
 
 .section-controls {
     width: 30%;
+    text-align: center;
+}
+
+.wardrobe-controls input {
+	display: block;
+	margin: .3em auto;
+}
+
+.blocks-controls input {
+	margin: .3em;
+}
+
+.blocks-controls li {
+	text-align: left;
+	padding: .3em;
+}
+
+.blocks-controls li:not(:first-child) {
+	border-top: 2px solid #bababa;
 }
 
 .section-svg {
 	position: fixed;
     width: 70%;
-}
-
-.wardrobe-svg {
-
 }
