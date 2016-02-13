@@ -13,10 +13,12 @@ wardrobeApp.controller('mainController', ['$scope', '$compile', function ($scope
         height: 30
     };
 
-    $scope.wardrobeWidth = 200;
+    $scope.wardrobeWidth = 180;
     $scope.wardrobeHeight = 200;
+    $scope.wardrobeDepth = 40;
     $scope.wardrobeWidthRatio = $scope.wardrobeWidth * $scope.multiplyCoeff;
     $scope.wardrobeHeightRatio = $scope.wardrobeHeight * $scope.multiplyCoeff;
+    $scope.wardrobeDepthRatio = $scope.wardrobeDepth * $scope.multiplyCoeff;
 
     $scope.limits = {
         blockLimitWidth: $scope.wardrobeWidth * $scope.multiplyCoeff
