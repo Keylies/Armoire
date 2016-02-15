@@ -271,6 +271,7 @@ wardrobeApp.directive('generateli', function ($compile) {
 						'<label for="block-color' + scope.count + '">Couleur du bloc</label>' +
 						'<input type="color" id="block-color' + scope.count + '" ng-model="block[' + scope.count + '].fill" ng-change="checkOffsets(' + scope.count + ')">' +
 						'</div>' +
+						'<button>Supprimer</button>' +
 						'</li>'
 					)
 					(scope));
@@ -287,9 +288,10 @@ wardrobeApp.directive('generateli', function ($compile) {
 
 				var g = document.createElementNS(xmlns, 'g');
 				var rect = document.createElementNS(xmlns, 'rect');
+				var number = document.createElementNS(xmlns, 'text');
 
-				rect.setAttribute('ng-attr-width', "{{block[" + scope.count + "].width * " + scope.multiplyCoeff + "}}");
-				rect.setAttribute('ng-attr-height', "{{block[" + scope.count + "].height * " + scope.multiplyCoeff + "}}");
+				rect.setAttribute('ng-attr-width', "{{block[" + scope.count + "].width}}");
+				rect.setAttribute('ng-attr-height', "{{block[" + scope.count + "].height}}");
 				rect.setAttribute('ng-attr-fill', "{{block[" + scope.count + "].fill}}");
 				rect.setAttribute('id', "rect" + scope.count);
 				rect.setAttribute('ng-attr-x', "{{block[" + scope.count + "].x}}");
@@ -297,8 +299,17 @@ wardrobeApp.directive('generateli', function ($compile) {
 				rect.setAttribute('stroke', "#000");
 				rect.setAttribute('stroke-width', "1");
 				//rect.setAttribute('y', coords.y + 80);
+				
+				number.setAttribute('ng-attr-x', "{{block[" + scope.count + "].x + 2}}");
+				number.setAttribute('ng-attr-y', "{{block[" + scope.count + "].y + 87}}");
+				number.setAttribute('font-size', "7");
+				number.appendChild(document.createTextNode(scope.count + 1));
+				
 				scope.block[scope.count].x = coords.x;
 				scope.block[scope.count].y = coords.y;
+
+				g.appendChild(rect);
+				g.appendChild(number);
 
 				if (scope.blockType == 'shelf') {
 
@@ -306,34 +317,24 @@ wardrobeApp.directive('generateli', function ($compile) {
 
 					scope.block[scope.count].fill = "#FCDDB1";
 
-					secondRect.setAttribute('width', "{{block[" + scope.count + "].width * " + scope.multiplyCoeff + "}}");
-					secondRect.setAttribute('height', "4");
+					secondRect.setAttribute('width', "{{block[" + scope.count + "].width}}");
+					secondRect.setAttribute('height', "3");
 					secondRect.setAttribute('x', "{{block[" + scope.count + "].x}}");
-					secondRect.setAttribute('y', "{{block[" + scope.count + "].y + (block[" + scope.count + "].height * " + scope.multiplyCoeff + " - 4) + 80}}");
+					secondRect.setAttribute('y', "{{block[" + scope.count + "].y + (block[" + scope.count + "].height - 3) + 80}}");
 
-					g.appendChild(rect);
 					g.appendChild(secondRect);
-
-					svg.appendChild(g);
-
-					$compile(svg)(scope);
-
+					
 				} else if (scope.blockType == 'drawer') {
 
 					var circle = document.createElementNS(xmlns, 'circle');
 
 					scope.block[scope.count].fill = "#D8D8CB";
 
-					circle.setAttribute('cx', "{{block[" + scope.count + "].x + (block[" + scope.count + "].width * " + scope.multiplyCoeff + " / 2)}}");
-					circle.setAttribute('cy', "{{block[" + scope.count + "].y + (block[" + scope.count + "].height * " + scope.multiplyCoeff + " / 2 + 80)}}");
-					circle.setAttribute('r', "4.5");
+					circle.setAttribute('cx', "{{block[" + scope.count + "].x + (block[" + scope.count + "].width / 2)}}");
+					circle.setAttribute('cy', "{{block[" + scope.count + "].y + (block[" + scope.count + "].height / 2 + 80)}}");
+					circle.setAttribute('r', "2.5");
 
-					g.appendChild(rect);
 					g.appendChild(circle);
-
-					svg.appendChild(g);
-
-					$compile(svg)(scope);
 
 				} else { // closet
 
@@ -341,18 +342,17 @@ wardrobeApp.directive('generateli', function ($compile) {
 
 					scope.block[scope.count].fill = "#7C99C4";
 
-					secondRect.setAttribute('width', "{{block[" + scope.count + "].width * " + scope.multiplyCoeff + "}}");
-					secondRect.setAttribute('height', "4");
+					secondRect.setAttribute('width', "{{block[" + scope.count + "].width}}");
+					secondRect.setAttribute('height', "3");
 					secondRect.setAttribute('x', "{{block[" + scope.count + "].x}}");
-					secondRect.setAttribute('y', "{{block[" + scope.count + "].y + (block[" + scope.count + "].height * " + scope.multiplyCoeff + " / 5 + 80)}}");
+					secondRect.setAttribute('y', "{{block[" + scope.count + "].y + (block[" + scope.count + "].height / 5 + 80)}}");
 
-					g.appendChild(rect);
 					g.appendChild(secondRect);
-
-					svg.appendChild(g);
-
-					$compile(svg)(scope);
 				}
+
+				svg.appendChild(g);
+
+				$compile(svg)(scope);
 
 				scope.count++;
 			}

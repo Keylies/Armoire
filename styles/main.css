@@ -29,6 +29,10 @@ header {
 	
 }
 
+.section-svg {
+	position: fixed;
+}
+
 .section-controls {
     width: 30%;
     text-align: center;
@@ -53,6 +57,9 @@ header {
 }
 
 .section-svg {
-
     width: 70%;
+}
+
+.wardrobe-svg {
+	transform: scale(1.6) translate(85px, 55px);
 }

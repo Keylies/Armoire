@@ -22,7 +22,7 @@
 
             <div class="wardrobe-controls">
             
-                <h2>Dimensions de l'armoire</h2>
+                <h2>Dimensions de l'armoire (en cm)</h2>
 
                 <div>
                     <label for="wardrobe-width">Largeur</label>
@@ -34,7 +34,7 @@
                 </div>
                 <div>
                     <label for="wardrobe-depth">Profondeur</label>
-                    <input type="number" id="wardrobe-depth" placeholder="Pronfondeur" ng-model="wardrobeDepth" min="40" max="80" ng-disabled="block.length > 0">
+                    <input type="number" id="wardrobe-depth" placeholder="Profondeur" ng-model="wardrobeDepth" min="40" max="80" ng-disabled="block.length > 0">
                 </div>
             </div>
 
@@ -54,57 +54,49 @@
         </section><!-- 
 	
      --><section class="section-svg">
-            <svg id="wardrobe-svg" class="wardrobe-svg" width="1000" height="800">
-                <!-- <rect width="{{wardrobeWidthRatio}}" height="{{wardrobeHeightRatio}}" fill="#000" /> -->
+            <svg id="wardrobe-svg" class="wardrobe-svg" width="375" height="310">
                 <g id="wardrobe-base">
 
-                    <rect id="wardrobe-back" x="{{60 + wardrobeDepth - 40}}" y="{{45 - wardrobeDepth + 40}}" fill="#D8D8D8" width="{{wardrobeWidthRatio}}" height="{{wardrobeHeightRatio}}"/>
+                    <rect id="wardrobe-back" x="{{30 + wardrobeDepth - 40}}" y="{{45 - wardrobeDepth + 40}}" fill="#D8D8D8" width="{{wardrobeWidth}}" height="{{wardrobeHeight}}"/>
 
                     <polyline id="wardrobe-left" fill="#51AF80" stroke="#000000" stroke-width="1"
                         points="
-                            0,{{wardrobeHeightRatio + 80}} 
-                            {{60 + wardrobeDepth - 40}},{{wardrobeHeightRatio + 45 - wardrobeDepth + 40}} 
-                            {{60 + wardrobeDepth - 40}},{{45 - wardrobeDepth + 40}} 
+                            0,{{wardrobeHeight + 80}} 
+                            {{30 + wardrobeDepth - 40}},{{wardrobeHeight + 45 - wardrobeDepth + 40}} 
+                            {{30 + wardrobeDepth - 40}},{{45 - wardrobeDepth + 40}} 
                             0,80"
                     />
 
                     <polygon id="wardrobe-top" fill="#1B1E1C" 
                         points="
                             0,80
-                            {{60 + wardrobeDepth - 40}},{{45 - wardrobeDepth + 40}} 
-                            {{wardrobeWidthRatio + 60 + wardrobeDepth - 40}},{{45 - wardrobeDepth + 40}} 
-                            {{wardrobeWidthRatio}}, 80"
+                            {{30 + wardrobeDepth - 40}},{{45 - wardrobeDepth + 40}} 
+                            {{wardrobeWidth + 30 + wardrobeDepth - 40}},{{45 - wardrobeDepth + 40}} 
+                            {{wardrobeWidth}}, 80"
                     />
 
                     <polygon id="wardrobe-bottom" fill="#303020" 
                         points="
-                            0,{{wardrobeHeightRatio + 80}} 
-                            {{60 + wardrobeDepth - 40}},{{wardrobeHeightRatio + 45 - wardrobeDepth + 40}} 
-                            {{wardrobeWidthRatio + 60 + wardrobeDepth - 40}},{{wardrobeHeightRatio + 45 - wardrobeDepth + 40}} 
-                            {{wardrobeWidthRatio}},{{wardrobeHeightRatio + 80}}"
+                            0,{{wardrobeHeight + 80}} 
+                            {{30 + wardrobeDepth - 40}},{{wardrobeHeight + 45 - wardrobeDepth + 40}} 
+                            {{wardrobeWidth + 30 + wardrobeDepth - 40}},{{wardrobeHeight + 45 - wardrobeDepth + 40}} 
+                            {{wardrobeWidth}},{{wardrobeHeight + 80}}"
                     />
 
                     <polyline id="wardrobe-right" fill="#51AF80" stroke="#000000" stroke-width="1"
                         points="
-                            {{wardrobeWidthRatio}},{{wardrobeHeightRatio + 80}} 
-                            {{wardrobeWidthRatio + 60 + wardrobeDepth - 40}},{{wardrobeHeightRatio + 45 - wardrobeDepth + 40}} 
-                            {{wardrobeWidthRatio + 60 + wardrobeDepth - 40}},{{45 - wardrobeDepth + 40}} 
-                            {{wardrobeWidthRatio}},80"
+                            {{wardrobeWidth}},{{wardrobeHeight + 80}} 
+                            {{wardrobeWidth + 30 + wardrobeDepth - 40}},{{wardrobeHeight + 45 - wardrobeDepth + 40}} 
+                            {{wardrobeWidth + 30 + wardrobeDepth - 40}},{{45 - wardrobeDepth + 40}} 
+                            {{wardrobeWidth}},80"
                     />
 
-                    <rect id="wardrobe-face" x="0" y="80" fill="none" width="{{wardrobeWidthRatio}}" height="{{wardrobeHeightRatio}}"/>
+                    <rect id="wardrobe-face" x="0" y="80" fill="none" width="{{wardrobeWidth}}" height="{{wardrobeHeight}}"/>
 
                 </g>
             </svg>
-            <!-- x,y x,y x,y x,y -->
-            <!-- ng-style="{'width': wardrobeWidth, 'height': wardrobeHeight }" -->
         </section>
-
     </div>
-
-    <footer>
-        
-    </footer>
 
     <script src="js/vendor/angular.min.js"></script>
     <script src="js/app.js"></script>
