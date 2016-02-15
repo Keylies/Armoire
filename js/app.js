@@ -25,12 +25,12 @@ wardrobeApp.controller('mainController', ['$scope', '$compile', function ($scope
 	$scope.wardrobeWidth = 180;
 	$scope.wardrobeHeight = 200;
 	$scope.wardrobeDepth = 40;
-	$scope.wardrobeWidthRatio = $scope.wardrobeWidth * $scope.multiplyCoeff;
-	$scope.wardrobeHeightRatio = $scope.wardrobeHeight * $scope.multiplyCoeff;
-	$scope.wardrobeDepthRatio = $scope.wardrobeDepth * $scope.multiplyCoeff;
+	$scope.wardrobeWidthRatio = $scope.wardrobeWidth ;
+	$scope.wardrobeHeightRatio = $scope.wardrobeHeight ;
+	$scope.wardrobeDepthRatio = $scope.wardrobeDepth ;
 
 	$scope.limits = {
-		blockLimitWidth: $scope.wardrobeWidth * $scope.multiplyCoeff
+		blockLimitWidth: $scope.wardrobeWidth 
 	};
 
 	$scope.replaceHeight = function (index, oldCoords) {
@@ -56,7 +56,8 @@ wardrobeApp.controller('mainController', ['$scope', '$compile', function ($scope
 		} else {
 			$scope.block[index] = oldCoords;
 		}
-	}
+		$scope.manageFill();
+	};
 	$scope.getBlocksAbove = function (block) {
 		var tmp = [];
 		$scope.block.forEach(function (b, i) {
@@ -73,7 +74,9 @@ wardrobeApp.controller('mainController', ['$scope', '$compile', function ($scope
 		var xScale = $scope.block[index].width - oldCoords.width;
 		xScale *= $scope.multiplyCoeff;
 		var blocksToMove = $scope.getBlocksRightSide($scope.block[index]);
+		//blocksToMove.push($scope.block[index]);
 		var allowedToMove = true;
+
 		// check if move is possible
 		blocksToMove.forEach(function (b, i) {
 			if (b.x + b.width + xScale > $scope.wardrobeWidthRatio - 30) {
@@ -90,7 +93,9 @@ wardrobeApp.controller('mainController', ['$scope', '$compile', function ($scope
 		} else {
 			$scope.block[index] = oldCoords;
 		}
-	}
+
+		$scope.manageFill();
+	};
 	$scope.getBlocksRightSide = function (block) {
 		var tmp = [];
 		$scope.block.forEach(function (b, i) {
@@ -105,8 +110,8 @@ wardrobeApp.controller('mainController', ['$scope', '$compile', function ($scope
 
 	$scope.checkOffsets = function (index) {};
 	$scope.checkWardrobe = function () {
-		$scope.wardrobeWidthRatio = $scope.wardrobeWidth * $scope.multiplyCoeff;
-		$scope.wardrobeHeightRatio = $scope.wardrobeHeight * $scope.multiplyCoeff;
+		$scope.wardrobeWidthRatio = $scope.wardrobeWidth ;
+		$scope.wardrobeHeightRatio = $scope.wardrobeHeight ;
 	};
 	$scope.findIndexFirstElementPreviousStep = function () {
 		return $scope.stepsIndex[$scope.stepsIndex.length - 2][0];
@@ -144,43 +149,58 @@ wardrobeApp.controller('mainController', ['$scope', '$compile', function ($scope
 		*/
 
 		$scope.wardrobeTable = [];
-		var wLimit = parseInt($scope.wardrobeWidthRatio / ($scope.defaultRectCoords.width * 2));
-		var hLimit = parseInt($scope.wardrobeHeightRatio / ($scope.defaultRectCoords.width * 2));
+		var wLimit = parseInt($scope.wardrobeWidthRatio / ($scope.defaultRectCoords.width ));
+		var hLimit = parseInt($scope.wardrobeHeightRatio / ($scope.defaultRectCoords.width ));
 
 		for (var i = 0; i < hLimit; i++) {
 			for (var j = 0; j < wLimit; j++) {
-				var x = ($scope.defaultRectCoords.width * 2) * j;
-				var y = $scope.wardrobeHeightRatio - ($scope.defaultRectCoords.height * 2) * (i + 1);
+				var x = ($scope.defaultRectCoords.width ) * j;
+				var y = $scope.wardrobeHeightRatio - ($scope.defaultRectCoords.height ) * (i + 1);
 				$scope.wardrobeTable.push({
 					x: x,
 					y: y,
-					width: $scope.defaultRectCoords.width * 2,
-					height: $scope.defaultRectCoords.height * 2,
-					blocksIn: []
+					width: $scope.defaultRectCoords.width ,
+					height: $scope.defaultRectCoords.height ,
+					blocksIn: [],
+					fullFilled: false
 				});
 			}
 		}
 	};
 	$scope.decomposeWardrobe();
 
-	$scope.linkToWardrobeTable = function (block) {
-		/*
-		$scope.wardrobeTable.forEach(function (coord) {
-			if ((block.x >= coord.x && block.x <= coord.x + coord.width ||
-					block.x + block.width >= coord.x && block.x + block.width <= coord.x + coord.width) &&
-				(block.y > coord.y && (block.y + block.height - ($scope.wardrobeHeightRatio - coord.height) < coord.y + coord.height))
-			) {
-				coord.blocksIn.push(block);
+	$scope.manageFill = function () {
+		$scope.block.forEach(function (block) {
+			$scope.wardrobeTable.forEach(function (ward) {
+				var blockX = block.x;
+				var blockY = block.y;
+				var blockW = block.width ;
+				var blockH = block.height ;
+				if ((ward.x >= blockX && ward.x + ward.width <= blockX + blockW) &&
+					(ward.y >= blockY && ward.y + ward.height <= blockY + blockH)) {
+					ward.fullFilled = true;
+				}
+			})
+		});
+	};
+
+	$scope.findFirstNoneFullFilled = function () {
+		var noneFilled = null;
+		for (var i = 0; i < $scope.wardrobeTable.length; i++) {
+			if (!$scope.wardrobeTable[i].fullFilled) {
+				noneFilled = $scope.wardrobeTable[i];
+				break;
 			}
-		});		
-		*/
+		}
+
+		return noneFilled;
 	};
 
 	$scope.collision = function (coord, block) {
 		if ((block.x >= coord.x && block.x <= coord.x + coord.width ||
 				block.x + block.width >= coord.x && block.x + block.width <= coord.x + coord.width)) {
 			var collision = true;
-		}else{
+		} else {
 			var collision = false;
 		}
 		return (collision);
@@ -188,52 +208,20 @@ wardrobeApp.controller('mainController', ['$scope', '$compile', function ($scope
 
 	$scope.placeRect = function () {
 		if ($scope.block.length > 1) {
-			var newCoords = {};
-			var found = false;
 
-			for (var i = 0; i < $scope.wardrobeTable.length; i++) {
-				for (var j = 0; j < $scope.block.length; j++) {
-					var collision = $scope.collision($scope.wardrobeTable[i], $scope.block[j]);
-					console.log(collision);
-					if (!collision) {
-						console.log(j);
-						found = true;
-						newCoords = $scope.block[j];
-						break;
-					}
-				}
-				if (found) {
-					console.log("obj");
-					break;
-				}
-			}
+			var notFullFilled = $scope.findFirstNoneFullFilled();
 
-			console.log(newCoords);
+			return {
+				x: notFullFilled.x,
+				y: notFullFilled.y
 
-			var lastBlock = $scope.block[$scope.block.length - 2];
-			if ((lastBlock.x + ($scope.defaultRectCoords.width * $scope.multiplyCoeff) + ($scope.defaultRectCoords.width * $scope.multiplyCoeff)) < $scope.limits.blockLimitWidth) {
-				$scope.manageStepsIndex();
-				$scope.stepsIndex[$scope.stepsCurrentIndex].push($scope.count);
-				var offsetDown = lastBlock.height * 2 - $scope.defaultRectCoords.height * 2;
-				return {
-					x: lastBlock.x + (lastBlock.width * $scope.multiplyCoeff),
-					y: lastBlock.y + offsetDown
-				};
-			} else {
-				$scope.stepsCurrentIndex++;
-				$scope.manageStepsIndex();
-				$scope.stepsIndex[$scope.stepsCurrentIndex].push($scope.count);
-				return {
-					x: 0,
-					y: $scope.block[$scope.findIndexFirstElementPreviousStep()].y - $scope.defaultRectCoords.height * $scope.multiplyCoeff
-				};
-			}
+			};
 		} else {
 			$scope.manageStepsIndex();
 			$scope.stepsIndex[$scope.stepsCurrentIndex].push($scope.count);
 			return {
 				x: 0,
-				y: $scope.wardrobeHeightRatio - ($scope.defaultRectCoords.height * $scope.multiplyCoeff)
+				y: $scope.wardrobeHeightRatio - ($scope.defaultRectCoords.height )
 			};
 		}
 	};
@@ -293,7 +281,9 @@ wardrobeApp.directive('generateli', function ($compile) {
 				scope.block[scope.count].x = coords.x;
 				scope.block[scope.count].y = coords.y;
 
-				scope.linkToWardrobeTable(scope.block[scope.count]);
+				scope.manageFill();
+
+				console.log(scope.wardrobeTable);
 
 				var g = document.createElementNS(xmlns, 'g');
 				var rect = document.createElementNS(xmlns, 'rect');
