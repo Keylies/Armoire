@@ -73,7 +73,7 @@ wardrobeApp.controller('mainController', ['$scope', '$compile', function ($scope
 
 		// check if move is possible
 		blocksToMove.forEach(function (b, i) {
-			if (b.x + b.width + xScale > $scope.wardrobeWidth) {
+			if (b.x + b.width + xScale >= $scope.wardrobeWidth) {
 				allowedToMove = false;
 				return;
 			}
@@ -95,8 +95,10 @@ wardrobeApp.controller('mainController', ['$scope', '$compile', function ($scope
 	$scope.getBlocksRightSide = function (block) {
 		var tmp = [];
 		$scope.block.forEach(function (b, i) {
-			if (b.x > block.x &&
-				((b.y >= block.y && b.y <= block.y + block.height) || ((b.y + b.height >= block.y && b.y + b.height <= block.y + block.height)))
+			if ((b.x > block.x) &&
+				(b.y == block.y && b.y + b.height == block.y + block.height) ||
+				(b.y > block.y && b.y < block.y + block.height) ||
+				(b.y + b.height > block.y && b.y + b.height < block.y + block.height)
 			) {
 				tmp.push(b);
 			}
@@ -149,8 +151,11 @@ wardrobeApp.controller('mainController', ['$scope', '$compile', function ($scope
 					(ward.y >= block.y && ward.y + ward.height <= block.y + block.height)) {
 					ward.fullFilled = true;
 				}
-				if (block.width % 30 != 0) {
-					ward.partialyFilledBy = block.width % 30;
+				
+				if (ward.y == block.y){
+					if (block.width % 30 != 0) {
+						ward.partialyFilledBy = block.width % 30;
+					}					
 				}
 			})
 		});
@@ -172,10 +177,9 @@ wardrobeApp.controller('mainController', ['$scope', '$compile', function ($scope
 		if ($scope.block.length > 1) {
 
 			do {
-				var notFullFilled = $scope.findFirstNoneFullFilled();
+				var notFullFilled = $scope.findFirstNoneFullFilled();								
 				if (notFullFilled != null) {
 					console.log(notFullFilled);
-					console.log($scope.wardrobeWidth);
 					if (notFullFilled.x + notFullFilled.partialyFilledBy + $scope.defaultRectCoords.width > $scope.wardrobeWidth) {
 						notFullFilled.impossibleToFill = true;
 					}
