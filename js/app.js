@@ -164,21 +164,52 @@ wardrobeApp.controller('mainController', ['$scope', '$compile', function ($scope
 	$scope.decomposeWardrobe();
 
 	$scope.linkToWardrobeTable = function (block) {
+		/*
 		$scope.wardrobeTable.forEach(function (coord) {
 			if ((block.x >= coord.x && block.x <= coord.x + coord.width ||
 					block.x + block.width >= coord.x && block.x + block.width <= coord.x + coord.width) &&
-				(block.y >= coord.y && block.y <= coord.y + coord.height ||
-					block.y + block.height >= coord.y && block.y + block.height <= coord.y + coord.height)
+				(block.y > coord.y && (block.y + block.height - ($scope.wardrobeHeightRatio - coord.height) < coord.y + coord.height))
 			) {
 				coord.blocksIn.push(block);
 			}
-		});
-		
-		console.log($scope.wardrobeTable);
+		});		
+		*/
 	};
+
+	$scope.collision = function (coord, block) {
+		if ((block.x >= coord.x && block.x <= coord.x + coord.width ||
+				block.x + block.width >= coord.x && block.x + block.width <= coord.x + coord.width)) {
+			var collision = true;
+		}else{
+			var collision = false;
+		}
+		return (collision);
+	}
 
 	$scope.placeRect = function () {
 		if ($scope.block.length > 1) {
+			var newCoords = {};
+			var found = false;
+
+			for (var i = 0; i < $scope.wardrobeTable.length; i++) {
+				for (var j = 0; j < $scope.block.length; j++) {
+					var collision = $scope.collision($scope.wardrobeTable[i], $scope.block[j]);
+					console.log(collision);
+					if (!collision) {
+						console.log(j);
+						found = true;
+						newCoords = $scope.block[j];
+						break;
+					}
+				}
+				if (found) {
+					console.log("obj");
+					break;
+				}
+			}
+
+			console.log(newCoords);
+
 			var lastBlock = $scope.block[$scope.block.length - 2];
 			if ((lastBlock.x + ($scope.defaultRectCoords.width * $scope.multiplyCoeff) + ($scope.defaultRectCoords.width * $scope.multiplyCoeff)) < $scope.limits.blockLimitWidth) {
 				$scope.manageStepsIndex();
@@ -242,11 +273,11 @@ wardrobeApp.directive('generateli', function ($compile) {
 						'<li>' +
 						'<div>' +
 						'<label for="block-width' + scope.count + '">Largeur du bloc</label>' +
-						'<input type="number" id="block-width' + scope.count + '" placeholder="Largeur" ng-model="block[' + scope.count + '].width" ng-change="checkOffsets(' + scope.count + '); replaceWidth(' + scope.count + ', \'{{block[' + scope.count + ']}}\')">' +
+						'<input type="number" id="block-width' + scope.count + '" min="30" placeholder="Largeur" ng-model="block[' + scope.count + '].width" ng-change="checkOffsets(' + scope.count + '); replaceWidth(' + scope.count + ', \'{{block[' + scope.count + ']}}\')">' +
 						'</div>' +
 						'<div>' +
 						'<label for="block-height' + scope.count + '">Hauteur du bloc</label>' +
-						'<input type="number" id="block-height' + scope.count + '" placeholder="Hauteur" ng-model="block[' + scope.count + '].height" ng-change="checkOffsets(' + scope.count + '); replaceHeight(' + scope.count + ', \'{{block[' + scope.count + ']}}\')">' +
+						'<input type="number" id="block-height' + scope.count + '" min="30" placeholder="Hauteur" ng-model="block[' + scope.count + '].height" ng-change="checkOffsets(' + scope.count + '); replaceHeight(' + scope.count + ', \'{{block[' + scope.count + ']}}\')">' +
 						'</div>' +
 						'<div>' +
 						'<label for="block-color' + scope.count + '">Couleur du bloc</label>' +
@@ -261,7 +292,7 @@ wardrobeApp.directive('generateli', function ($compile) {
 				var coords = scope.placeRect();
 				scope.block[scope.count].x = coords.x;
 				scope.block[scope.count].y = coords.y;
-				
+
 				scope.linkToWardrobeTable(scope.block[scope.count]);
 
 				var g = document.createElementNS(xmlns, 'g');
@@ -273,6 +304,8 @@ wardrobeApp.directive('generateli', function ($compile) {
 				rect.setAttribute('id', "rect" + scope.count);
 				rect.setAttribute('ng-attr-x', "{{block[" + scope.count + "].x}}");
 				rect.setAttribute('ng-attr-y', "{{block[" + scope.count + "].y + 80}}");
+				rect.setAttribute('stroke', "#000");
+				rect.setAttribute('stroke-width', "1");
 				//rect.setAttribute('y', coords.y + 80);
 				scope.block[scope.count].x = coords.x;
 				scope.block[scope.count].y = coords.y;
